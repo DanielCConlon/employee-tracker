@@ -25,3 +25,10 @@ CREATE TABLE employee (
     CONSTRAINT fk_manager FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE CASCADE,
     CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE
 );
+
+
+
+-- Select employee.first_name, employee.last_name, role.title, role.salary, department.name
+-- from employee
+-- left join role as role on employee.role_id = role.id
+-- left join department as department on role.department_id = department.id
