@@ -10,23 +10,15 @@ VALUES
 ('Help desk', 65000, 2),
 ('Hiring specialist', 70000, 3);
 
-INSERT INTO employee (first_name, last_name, role_id)
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
-('James', 'Fracno', 1),
-('Bob', 'Whataburger', 2),
-('Tyler', 'Burger', 3),
-('Five', 'Guys', 2),
-('Cookout', 'BurgerTray', 3),
-('Prime', 'Rib', 1),
-('James', 'Fraser', 1),
-('Jack', 'London', 2),
-('Robert', 'Bruce', 2),
-('Peter', 'Greenaway', 2),
-('Derek', 'Jarman', 3),
-('Paolo', 'Pasolini', 3),
-('Heathcote', 'Williams', 3),
-('Sandy', 'Powell', 1),
-('Emil', 'Zola', 1)
+('James', 'Fracno', 1, NULL),
+('Bob', 'Whataburger', 2, NULL),
+('Tyler', 'Burger', 3, NULL),
+('Five', 'Guys', 1, 1),
+('Cookout', 'BurgerTray', 2, 2),
+('Prime', 'Rib', 3, 3)
+
 
 
 
