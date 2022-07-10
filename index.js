@@ -38,6 +38,47 @@ const addNewDepartmentPrompt = [
     }
 ]
 
+ addNewRolePrompt = function(departmentChoices){
+    return [
+        {
+            type: 'input',
+            name: 'roleName',
+            message: 'What is the name of the Role? ',
+            validate: newRoleNameInput => {
+                if (newRoleNameInput) {
+                    return true;
+                }
+                else {
+                    console.log('Please enter a Role.');
+                    return false;
+                }
+            }
+        },
+    
+        {
+            type: 'input',
+            name: 'roleSalary',
+            message: 'What is the salary of the Role? ',
+            validate: newRoleSalaryInput => {
+                if (newRoleSalaryInput) {
+                    return true;
+                }
+                else {
+                    console.log('Please enter a Salary.');
+                    return false;
+                }
+            }
+        },
+    
+        {
+            type: 'list',
+            name: 'roleDepartment',
+            message: 'What department does this role belong to? ',
+            choices: departmentChoices
+        }
+    
+    ];
+ };
 
 // prompt the user
 const promptUser = function() {
@@ -61,13 +102,23 @@ const promptUser = function() {
             inquirer
             .prompt(addNewDepartmentPrompt)
             .then(({ newDepartment }) => {
-                // console.log(newDepartment);
                 queries.addDepartment(newDepartment);
             })
             break;
 
             case 'Add a role':
-            console.log('It maybe working')
+            // run a query to get a list of departments to pass into inquirer prompt so the user only can choose from a list of departments from the DB
+            db.query(`SELECT * FROM department`, (err, res) => {
+                const deptChoices = res.map((row) => {
+                    return { value: row.id, name: row.name };
+                });
+                const newRolePrompt = addNewRolePrompt(deptChoices);
+                inquirer
+                .prompt(newRolePrompt)
+                .then(({ roleName, roleSalary, roleDepartment }) => {
+                    queries.addRole(roleName, roleSalary, roleDepartment);
+                })
+            })
             break;
 
             case 'Add an employee':

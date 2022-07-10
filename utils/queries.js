@@ -41,9 +41,9 @@ function addDepartment (newDepartmentName) {
     })
 }
 
-function addRole () {
+function addRole (roleName, roleSalary, roleDepartment) {
     const sql = ("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)");
-    const params = []
+    const params = [roleName, roleSalary, roleDepartment]
 
     db.query(sql, params, (err, result) => {
         if (err) {
@@ -55,4 +55,4 @@ function addRole () {
 
 
 
-module.exports = { viewAllDepartments, viewAllRoles, viewAllEmployees, addDepartment };
+module.exports = { viewAllDepartments, viewAllRoles, viewAllEmployees, addDepartment, addRole };
