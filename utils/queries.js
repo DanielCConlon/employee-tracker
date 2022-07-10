@@ -6,12 +6,53 @@ function viewAllDepartments () {
             console.log(err);
         }
         console.table(result);
-});
+    });
+};
+
+function viewAllRoles () {
+    db.query('SELECT * FROM ROLE', (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        console.table(result);
+    });
+
+};
+
+function viewAllEmployees () {
+    db.query('SELECT * FROM employee', (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        console.table(result);
+    });
+};
+
+function addDepartment (newDepartmentName) {
+    const sql = ("INSERT INTO department (name) VALUES (?)");
+    const params = [newDepartmentName]
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            console.log(err);
+          }
+        console.log(`You added a new department called ${params}`)
+        console.log(result);
+    })
+}
+
+function addRole () {
+    const sql = ("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)");
+    const params = []
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            console.log(err);
+          }
+        console.log(result);
+    })
 }
 
 
 
-
-
-
-module.exports = {viewAllDepartments};
+module.exports = { viewAllDepartments, viewAllRoles, viewAllEmployees, addDepartment };

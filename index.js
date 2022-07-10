@@ -21,45 +21,59 @@ const initialQuestionList = [
     }
 ]
 
+const addNewDepartmentPrompt = [
+    {
+        type: 'input',
+        name: 'newDepartment',
+        message: 'What is the name of the department? ',
+        validate: departmentInput => {
+            if (departmentInput) {
+                return true;
+            }
+            else {
+                console.log('Please name a department.');
+                return false;
+            }
+        }
+    }
+]
+
 
 // prompt the user
 const promptUser = function() {
     inquirer
     .prompt(initialQuestionList)
     .then((userResponse) => {
-        console.log(userResponse.userChoice);
         switch(userResponse.userChoice) {
             case 'View all departments':
-                console.log(queries);
             queries.viewAllDepartments();
             break;
-        }
-        switch(userResponse.userChoice) {
+
             case 'View all roles':
-            console.log('It maybe working')
+            queries.viewAllRoles();
             break;
-        }
-        switch(userResponse.userChoice) {
+
             case 'View all employees':
-            console.log('It maybe working')
+            queries.viewAllEmployees();
             break;
-        }
-        switch(userResponse.userChoice) {
+
             case 'Add a department':
-            console.log('It maybe working')
+            inquirer
+            .prompt(addNewDepartmentPrompt)
+            .then(({ newDepartment }) => {
+                // console.log(newDepartment);
+                queries.addDepartment(newDepartment);
+            })
             break;
-        }
-        switch(userResponse.userChoice) {
+
             case 'Add a role':
             console.log('It maybe working')
             break;
-        }
-        switch(userResponse.userChoice) {
+
             case 'Add an employee':
             console.log('It maybe working')
             break;
-        }
-        switch(userResponse.userChoice) {
+
             case 'Update an employee role':
             console.log('It maybe working')
             break;
