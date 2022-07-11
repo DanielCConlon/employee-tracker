@@ -156,14 +156,17 @@ const promptUser = function() {
         switch(userResponse.userChoice) {
             case 'View all departments':
             queries.viewAllDepartments();
+            promptUser();
             break;
 
             case 'View all roles':
             queries.viewAllRoles();
+            promptUser();
             break;
 
             case 'View all employees':
             queries.viewAllEmployees();
+            promptUser();
             break;
 
             case 'Add a department':
@@ -171,6 +174,7 @@ const promptUser = function() {
             .prompt(addNewDepartmentPrompt)
             .then(({ newDepartment }) => {
                 queries.addDepartment(newDepartment);
+                promptUser();
             })
             break;
 
@@ -185,6 +189,7 @@ const promptUser = function() {
                 .prompt(newRolePrompt)
                 .then(({ roleName, roleSalary, roleDepartment }) => {
                     queries.addRole(roleName, roleSalary, roleDepartment);
+                    promptUser();
                 })
             })
             break;
@@ -222,7 +227,8 @@ const promptUser = function() {
                             .then(({ employeesFirstName, employeesLastName, employeesRole, employeeManager }) => {
                                 queries.addEmployee(employeesFirstName, employeesLastName, employeesRole, employeeManager);
                                 console.log(`${employeesFirstName} ${employeesLastName} was added to the database.`)
-                            })
+                                promptUser();
+                            });
                         })
                     })
 
@@ -251,6 +257,7 @@ const promptUser = function() {
                                 console.log(`${updateEmloyeeOption}'s role was updated!`);
 
                                 queries.updateEmployee(updateEmloyeeOption, updateEmloyeeRole);
+                                promptUser();
                             });
                         }
                     )
