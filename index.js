@@ -126,8 +126,26 @@ addNewEmployeePrompt = function(roleChoices, managerChoices) {
             choices: managerChoices
         }
     ]
-}
+};
 
+
+updateEmployeePrompt = function(employeeChoices, roleChoiceForUpdate) {
+    return [
+        {
+            type: 'list',
+            name: 'updateEmloyeeOption',
+            message: "Which employee's role do you want to update? ",
+            choices: employeeChoices
+        },
+
+        {
+            type: 'list',
+            name: 'updateEmloyeeRole',
+            message: "What do you want to update their role to? ",
+            choices: roleChoiceForUpdate
+        },
+    ]
+};
 
 
 // prompt the user
@@ -203,6 +221,7 @@ const promptUser = function() {
                             .prompt(roleChoicesManagerChoices)
                             .then(({ employeesFirstName, employeesLastName, employeesRole, employeeManager }) => {
                                 queries.addEmployee(employeesFirstName, employeesLastName, employeesRole, employeeManager);
+                                console.log(`${employeesFirstName} ${employeesLastName} was added to the database.`)
                             })
                         })
                     })
@@ -210,7 +229,33 @@ const promptUser = function() {
             break;
 
             case 'Update an employee role':
-            console.log('It maybe working')
+            db.query(
+                `SELECT CONCAT(employee.first_name, " ", employee.last_name) AS empName FROM employee`,
+                (err, res) => {
+                    const employeeChoices = res.map((row) => {
+                        return { value: row.empName, name: row.empName };
+                    });
+
+                    db.query(
+                        `SELECT id, title
+                        FROM role`,
+                        (err, res) => {
+                            const roleChoiceForUpdate = res.map((row) => {
+                                return { value: row.id, name: row.title };
+                            });
+
+                            const update = updateEmployeePrompt(employeeChoices, roleChoiceForUpdate);
+                            inquirer
+                            .prompt(update)
+                            .then(({ updateEmloyeeOption, updateEmloyeeRole }) => {
+                                console.log(`${updateEmloyeeOption}'s role was updated!`);
+
+                                queries.updateEmployee(updateEmloyeeOption, updateEmloyeeRole);
+                            });
+                        }
+                    )
+                }
+            );
             break;
         }
     })

@@ -1,4 +1,5 @@
 const db = require('../db/connection');
+// const cTable = require('console.table');
 
 function viewAllDepartments () {
     db.query('SELECT * FROM DEPARTMENT', (err, result) => {
@@ -65,6 +66,22 @@ function addEmployee (employeesFirstName, employeesLastName, employeesRole, empl
     });
 }
 
+function updateEmployee (updateEmloyeeOption, updateEmloyeeRole) {
+    const splitEmployee = updateEmloyeeOption.split(" ");
+    first_name = splitEmployee[0];
+    last_name = splitEmployee[1];
+
+    const sql = `UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?`;
+    const params = [updateEmloyeeRole, first_name, last_name];
+
+    db.query(sql, params, (err, res) => {
+        if (err) {
+            console.log(err);
+          }
+        console.log(res);
+    });
+}
 
 
-module.exports = { viewAllDepartments, viewAllRoles, viewAllEmployees, addDepartment, addRole, addEmployee };
+
+module.exports = { viewAllDepartments, viewAllRoles, viewAllEmployees, addDepartment, addRole, addEmployee, updateEmployee };
