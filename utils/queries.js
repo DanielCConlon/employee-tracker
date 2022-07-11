@@ -38,21 +38,33 @@ function addDepartment (newDepartmentName) {
           }
         console.log(`You added a new department called ${params}`)
         console.log(result);
-    })
+    });
 }
 
 function addRole (roleName, roleSalary, roleDepartment) {
     const sql = ("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)");
-    const params = [roleName, roleSalary, roleDepartment]
+    const params = [roleName, roleSalary, roleDepartment];
 
     db.query(sql, params, (err, result) => {
         if (err) {
             console.log(err);
           }
         console.log(result);
-    })
+    });
+}
+
+function addEmployee (employeesFirstName, employeesLastName, employeesRole, employeeManager) {
+    const sql = ("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)");
+    const params = [employeesFirstName, employeesLastName, employeesRole, employeeManager];
+
+    db.query(sql, params, (err, res) => {
+        if (err) {
+            console.log(err);
+          }
+        console.log(res);
+    });
 }
 
 
 
-module.exports = { viewAllDepartments, viewAllRoles, viewAllEmployees, addDepartment, addRole };
+module.exports = { viewAllDepartments, viewAllRoles, viewAllEmployees, addDepartment, addRole, addEmployee };

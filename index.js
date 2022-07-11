@@ -80,6 +80,56 @@ const addNewDepartmentPrompt = [
     ];
  };
 
+addNewEmployeePrompt = function(roleChoices, managerChoices) {
+    return [
+        {
+            type: 'input',
+            name: 'employeesFirstName',
+            message: 'What is the employees first name? ',
+            validate: newEmployeeFirstName => {
+                if (newEmployeeFirstName) {
+                    return true;
+                }
+                else {
+                    console.log('Please enter a first name.');
+                    return false;
+                }
+            }
+        },
+
+        {
+            type: 'input',
+            name: 'employeesLastName',
+            message: 'What is the employees last name? ',
+            validate: newEmployeeLastName => {
+                if (newEmployeeLastName) {
+                    return true;
+                }
+                else {
+                    console.log('Please enter a last name.');
+                    return false;
+                }
+            }
+        },
+
+        {
+            type: 'list',
+            name: 'employeesRole',
+            message: 'What is the employees role? ',
+            choices: roleChoices
+        },
+
+        {
+            type: 'list',
+            name: 'employeeManager',
+            message: "Who is the employee's manager? ",
+            choices: managerChoices
+        }
+    ]
+}
+
+
+
 // prompt the user
 const promptUser = function() {
     inquirer
@@ -122,7 +172,41 @@ const promptUser = function() {
             break;
 
             case 'Add an employee':
-            console.log('It maybe working')
+            // run a query that will get a list of all roles
+            db.query(
+                    `SELECT DISTINCT employee.role_id, role.title
+                    FROM employee as employee
+                    LEFT JOIN role on employee.role_id = role.id
+                    LEFT JOIN department on role.department_id = department.id
+                    LEFT JOIN employee as employee2 on employee.id = employee2.manager_id`,
+                    (err, res) => {
+                        const roleChoices = res.map((row) => {
+                            return { value: row.role_id, name: row.title };
+                        });
+                        // run a query that gets a list of all managers
+                        const sql = `SELECT DISTINCT employee.id, CONCAT(employee.first_name, " ", employee.last_name) AS manager 
+                                    FROM employee
+                                    LEFT JOIN role on employee.role_id = role.id
+                                    LEFT JOIN department on role.department_id = department.id
+
+                                    WHERE employee.manager_id IS  NULL`;
+
+
+                        db.query(sql, (err, res) => {
+                            const managerChoices = res.map((row) => {
+                                return { value: row.id, name: row.manager };
+                            });
+
+                            const roleChoicesManagerChoices = addNewEmployeePrompt(roleChoices, managerChoices);
+
+                            inquirer
+                            .prompt(roleChoicesManagerChoices)
+                            .then(({ employeesFirstName, employeesLastName, employeesRole, employeeManager }) => {
+                                queries.addEmployee(employeesFirstName, employeesLastName, employeesRole, employeeManager);
+                            })
+                        })
+                    })
+
             break;
 
             case 'Update an employee role':
